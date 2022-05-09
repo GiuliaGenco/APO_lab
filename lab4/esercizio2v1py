@@ -1,0 +1,216 @@
+# versione senza canvas vista a lezione e RIPETITIVA SENZA L FUNCTION
+
+# importo tkinter
+from tkinter import *
+from tkinter import ttk
+
+root = Tk()
+root.title("Gioco del Tris")
+
+s = ttk.Style()
+s.configure("new.TButton", font=("", 20))  # così posso richiamare direttamente lo stile
+
+# creo una matrice 3x3 per le caselle del tris
+b = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
+
+# per gestire l'inserimento di una mossa dobbiamo sapere a che giocatore tocca e quindi il simbolo da utilizzare
+simboli = ["O", "X"]
+turno = 0
+
+# dobbiamo gestire la condizione di vittoria e bloccare il gioco quando qualcuno vince
+vittoria = False
+
+
+def controllaVittoria():
+    global vittoria
+    # devo cercare elementi uguali nella matrice
+    for i in range(3):
+        totali = {"O": [0, 0], "X": [0, 0], "": [0, 0]}
+        # uso un dizionario per tenere i conti di quanti in riga e quanti in colonna
+        for j in range(3):
+            totali[matrice[i][j]][0] += 1
+            totali[matrice[j][i]][1] += 1
+            # Sto esaminando in contemporanea le righe e le colonne: i è quello che al momento non cambia
+        if not vittoria and 3 in totali["O"]:
+            vittoria = True
+            print("Ha vinto il giocatore 1: O")
+        if not vittoria and 3 in totali["X"]:
+            vittoria = True
+            print("Ha vinto il giocatore 2: X")
+            # ora devo verificare la diagonale
+        totali = {"O": [0, 0], "X": [0, 0], "": [0, 0]}
+        for j in range(3):
+            totali[matrice[j][j]][0] += 1
+            totali[matrice[j][2-j]][1] += 1
+        if not vittoria and 3 in totali["O"]:
+            vittoria = True
+            print("Ha vinto il giocatore 1: O")
+        if not vittoria and 3 in totali["X"]:
+            vittoria = True
+            print("Ha vinto il giocatore 2: X")
+
+
+# creo una matrice di stringhe vuote per riempirle poi con le mosse
+matrice = [["", "", ""], ["", "", ""], ["", "", ""]]
+
+
+# quando schiaccio i bottoni:
+
+def p00():
+    # devo verificare se il bottone è già stato premuto e quindi se c'è qualcosa scritto nella matrice
+    global turno
+    r = 0
+    c = 0
+    if not vittoria and matrice[r][c] == "":
+        matrice[r][c] = simboli[turno]
+        b[r][c]["text"] = simboli[turno]
+        controllaVittoria()
+        turno = (turno+1) % 2
+
+
+def p01():
+    # devo verificare se il bottone è già stato premuto e quindi se c'è qualcosa scritto nella matrice
+    global turno
+    r = 0
+    c = 1
+    if not vittoria and matrice[r][c] == "":
+        matrice[r][c] = simboli[turno]
+        b[r][c]["text"] = simboli[turno]
+        controllaVittoria()
+        turno = (turno+1) % 2
+
+
+def p02():
+    # devo verificare se il bottone è già stato premuto e quindi se c'è qualcosa scritto nella matrice
+    global turno
+    r = 0
+    c = 2
+    if not vittoria and matrice[r][c] == "":
+        matrice[r][c] = simboli[turno]
+        b[r][c]["text"] = simboli[turno]
+        controllaVittoria()
+        turno = (turno+1) % 2
+
+
+def p10():
+    # devo verificare se il bottone è già stato premuto e quindi se c'è qualcosa scritto nella matrice
+    global turno
+    r = 1
+    c = 0
+    if not vittoria and matrice[r][c] == "":
+        matrice[r][c] = simboli[turno]
+        b[r][c]["text"] = simboli[turno]
+        controllaVittoria()
+        turno = (turno+1) % 2
+
+
+def p11():
+    # devo verificare se il bottone è già stato premuto e quindi se c'è qualcosa scritto nella matrice
+    global turno
+    r = 1
+    c = 1
+    if not vittoria and matrice[r][c] == "":
+        matrice[r][c] = simboli[turno]
+        b[r][c]["text"] = simboli[turno]
+        controllaVittoria()
+        turno = (turno+1) % 2
+
+
+def p12():
+    # devo verificare se il bottone è già stato premuto e quindi se c'è qualcosa scritto nella matrice
+    global turno
+    r = 1
+    c = 2
+    if not vittoria and matrice[r][c] == "":
+        matrice[r][c] = simboli[turno]
+        b[r][c]["text"] = simboli[turno]
+        controllaVittoria()
+        turno = (turno+1) % 2
+
+
+def p20():
+    # devo verificare se il bottone è già stato premuto e quindi se c'è qualcosa scritto nella matrice
+    global turno
+    r = 2
+    c = 0
+    if not vittoria and matrice[r][c] == "":
+        matrice[r][c] = simboli[turno]
+        b[r][c]["text"] = simboli[turno]
+        controllaVittoria()
+        turno = (turno+1) % 2
+
+
+def p21():
+    # devo verificare se il bottone è già stato premuto e quindi se c'è qualcosa scritto nella matrice
+    global turno
+    r = 2
+    c = 1
+    if not vittoria and matrice[r][c] == "":
+        matrice[r][c] = simboli[turno]
+        b[r][c]["text"] = simboli[turno]
+        controllaVittoria()
+        turno = (turno+1) % 2
+
+
+def p22():
+    # devo verificare se il bottone è già stato premuto e quindi se c'è qualcosa scritto nella matrice
+    global turno
+    r = 2
+    c = 2
+    if not vittoria and matrice[r][c] == "":
+        matrice[r][c] = simboli[turno]
+        b[r][c]["text"] = simboli[turno]
+        controllaVittoria()
+        turno = (turno+1) % 2
+
+
+# voglio gestire separatamente le cose e ogni pulsante separatamente
+
+b[0][0] = ttk.Button(root, command=p00, style="new.TButton")
+b[0][0].grid(row=0, column=0, sticky="nsew")
+b[0][1] = ttk.Button(root, command=p01, style="new.TButton")
+b[0][1].grid(row=0, column=1, sticky="nsew")
+b[0][2] = ttk.Button(root, command=p02, style="new.TButton")
+b[0][2].grid(row=0, column=2, sticky="nsew")
+b[1][0] = ttk.Button(root, command=p10, style="new.TButton")
+b[1][0].grid(row=1, column=0, sticky="nsew")
+b[1][1] = ttk.Button(root, command=p11, style="new.TButton")
+b[1][1].grid(row=1, column=1, sticky="nsew")
+b[1][2] = ttk.Button(root, command=p12, style="new.TButton")
+b[1][2].grid(row=1, column=2, sticky="nsew")
+b[2][0] = ttk.Button(root, command=p20, style="new.TButton")
+b[2][0].grid(row=2, column=0, sticky="nsew")
+b[2][1] = ttk.Button(root, command=p21, style="new.TButton")
+b[2][1].grid(row=2, column=1, sticky="nsew")
+b[2][2] = ttk.Button(root, command=p22, style="new.TButton")
+b[2][2].grid(row=2, column=2, sticky="nsew")
+
+# sistemo le dimensioni dei quadrati
+dim = 200
+
+for i in range(3):
+    root.columnconfigure(i, minsize=dim)
+    root.rowconfigure(i, minsize=dim)
+
+
+# voglio che schiacciando il + si ingrandisca e con il - si riduca
+def ingrandisci():
+    global dim
+    dim += 10
+    for i in range(3):
+        root.columnconfigure(i, minsize=dim)
+        root.rowconfigure(i, minsize=dim)
+
+
+def riduci():
+    global dim
+    dim -= 10
+    for i in range(3):
+        root.columnconfigure(i, minsize=dim)
+        root.rowconfigure(i, minsize=dim)
+
+
+root.bind("<plus>", lambda e: ingrandisci())  # è importante questa forma o mettere la e nella parentesi quando def la f
+root.bind("<minus>", lambda e: riduci())
+
+root.mainloop()
