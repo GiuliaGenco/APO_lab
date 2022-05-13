@@ -29,12 +29,14 @@ def main():
     tap_1.connect(spl_1)
     spl_1.connect_at(snk_1, 0)
     spl_1.connect_at(snk_2, 1)
+    snk_1.connect(spl_1)
 
     # get outputs
     print("Outputs:")
     print(src_1.get_output().get_name() if src_1.get_output() is not None else None)    # Tap_1
     print(tap_1.get_output().get_name() if tap_1.get_output() is not None else None)    # Split_1
     print([e.get_name() for e in spl_1.get_outputs() if e is not None])                 # ['Sink_1', 'Sink_2']
+    print(snk_1.get_output().get_name() if spl_1.get_output() is not None else None)    # None
 
     # set simulation parameters
     src_1.set_flow(11.5)
