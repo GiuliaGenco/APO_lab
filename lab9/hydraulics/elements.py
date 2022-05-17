@@ -1,5 +1,6 @@
 from typing import List, Optional
 from abc import ABC
+import abc
 
 
 class Element(ABC):
@@ -39,16 +40,25 @@ class Element(ABC):
     def set_uscita(self, usc):
         self.uscita = usc
 
+    @abc.abstractmethod
+    def simulate(self, inflow, sim_list):
+        pass
+
 
 class Source(Element):
     def __init__(self, name: str) -> None:
         super().__init__(name)
-        self._flow = None
+        self._flow = 0
 
     def set_flow(self, flow: float) -> None:
         # definire la portata per una sorgente (Source) con il metodo set_flow(self, flow: float) -> None,
         # che riceve come parametro un numero reale che rappresenta i metri cubi al secondo erogati dalla sorgente
         self._flow = flow
+
+    def simulate(self, inflow, sim_list):
+        sim_list.append("Source {} {:.3f} {:.3f}".format(self.name, 0, self._flow))
+        # Per poter creare la lista di oggetti ancora da simulare li ritorno
+        return [(self.uscita, self._flow)]
 
 
 class Tap(Element):
@@ -59,15 +69,19 @@ class Tap(Element):
         self._portataIngresso = None
 
     def set_status(self, to_open: bool = True) -> None:
-        if to_open is True:
-            self._portataUscita = self._portataIngresso
+        self._open = to_open
+        # if to_open is True:
+        #     self._portataUscita = self._portataIngresso
 
     def set_portataIngresso(self, pi):
         self._portataIngresso = pi
 
-        # impostare l'apertura dei rubinetti (Tap), tramite il metodo set_status(self, to_open: bool = True) -> None,
-# che riceve come parametro un boolean.
-# Se un rubinetto è aperto la portata in uscita è uguale a quell in ingresso, altrimenti la portata in uscita è pari a 0
+    def simulate(self, inflow, sim_list):
+        outflow = 0
+        if self._open:
+            outflow = inflow
+        sim_list.append("Tap {} {:.3f} {:.3f}".format(self.name, inflow, outflow))
+        return [(self.uscita, outflow)]
 
 
 class Sink(Element):
@@ -76,6 +90,10 @@ class Sink(Element):
 
     def connect(self, elm: "Element") -> None:
         pass
+
+    def simulate(self, inflow, sim_list):
+        sim_list.append("Sink {} {:.3f} {:.3f}".format(self.name, inflow, 0))
+        return []
 
 
 class Split(Element):
@@ -103,3 +121,8 @@ class Split(Element):
         # Se un'uscita non è connessa ad alcun elemento, inserire None nella lista al posto dell'elemento.
         lista = [self.prima_uscita, self.seconda_uscita]
         return lista
+
+    def simulate(self, inflow, sim_list):
+        outflow = inflow / 2
+        sim_list.append("Split {} {:.3f} {:.3f} {:.3f}".format(self.name, inflow, outflow, outflow))
+        return [(self.prima_uscita, outflow), (self.seconda_uscita, outflow)]
